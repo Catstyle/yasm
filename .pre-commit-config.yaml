@@ -1,7 +1,13 @@
+repos:
 -   repo: git://github.com/pre-commit/pre-commit-hooks
-    sha: v0.9.2
+    rev: v2.2.3
     hooks:
     -   id: trailing-whitespace
     -   id: autopep8-wrapper
     -   id: flake8
     -   id: check-added-large-files
+
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v1.17.1
+    hooks:
+    -   id: pyupgrade

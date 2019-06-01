@@ -25,9 +25,7 @@ class NestedState(State):
             self.parent._on(event, instance)
 
     def __repr__(self):
-        return '<NestedState {}, handlers={}>'.format(
-            self.name, self.handlers.keys()
-        )
+        return f'<NestedState {self.name}, handlers={self.handlers.keys()}>'
 
 
 class NestedMachine(Machine):
@@ -42,9 +40,7 @@ class NestedMachine(Machine):
             if transitions:
                 break
             if not target.parent:
-                raise InvalidTransition('{} cannot handle event {}'.format(
-                    state, event
-                ))
+                raise InvalidTransition(f'{state} cannot handle event {event}')
             target = target.parent
         for transition in transitions:
             for cond, target in transition['conditions']:
@@ -129,8 +125,8 @@ class NestedMachine(Machine):
                 tmp_states.append(state)
             else:
                 raise ValueError(
-                    "{} is not an instance of NestedState "
-                    "required by NestedMachine.".format(state)
+                    f"{state} is not an instance of NestedState "
+                    "required by NestedMachine."
                 )
             new_states.extend(tmp_states)
 
@@ -139,8 +135,8 @@ class NestedMachine(Machine):
             name = s.name
             if name in duplicate_check:
                 raise ValueError(
-                    "State %s cannot be added since it is already in "
-                    "state list %s.".format(name, [n.name for n in new_states])
+                    f"State {name} cannot be added since it is already in "
+                    "state list {[n.name for n in new_states]}."
                 )
             duplicate_check.add(name)
         return new_states

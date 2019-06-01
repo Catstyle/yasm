@@ -21,9 +21,7 @@ class Event(object):
         self.cargo = cargo
 
     def __repr__(self):
-        return '<Event {}, input={!r}, cargo={}>'.format(
-            self.name, self.input, self.cargo,
-        )
+        return f'<Event {self.name}, input={self.input!r}, cargo={self.cargo}>'
 
 
 class State(object):
@@ -45,9 +43,7 @@ class State(object):
         pass
 
     def __repr__(self):
-        return '<State {}, handlers={}>'.format(
-            self.name, self.handlers.keys()
-        )
+        return f'<State {self.name}, handlers={self.handlers.keys()}>'
 
 
 class Machine(object):
@@ -67,9 +63,7 @@ class Machine(object):
     def _get_transition(self, state, event, instance):
         transitions = self.transitions[(state.name, event.name)]
         if not transitions and event.raise_invalid_transition:
-            raise InvalidTransition('{} cannot handle event {}'.format(
-                state, event
-            ))
+            raise InvalidTransition(f'{state} cannot handle event {event}')
         for transition in transitions:
             for cond, target in transition['conditions']:
                 if isinstance(cond, list):
@@ -115,24 +109,22 @@ class Machine(object):
 
     def _validate_add_state(self, state_name, state, force):
         if not isinstance(state, State):
-            raise InvalidState('`%r` is not a valid State' % state)
+            raise InvalidState(f'`{state}` is not a valid State')
         if self.has_state(state_name) and not force:
-            raise AlreadyHasState(
-                '`%s` already has state: %s' % (self, state_name)
-            )
+            raise AlreadyHasState(f'`{self}` already has state: {state_name}')
 
     def _validate_transition(self, from_state, to_state, event):
         if not self.has_state(from_state) and from_state != '*':
-            raise NoState('unknown from state "{0}"'.format(from_state))
+            raise NoState(f'unknown from state "{from_state}"')
         if not self.has_state(to_state):
-            raise NoState('unknown to state "{0}"'.format(to_state))
+            raise NoState(f'unknown to state "{to_state}"')
 
     def _validate_initial_state(self, state_name, force):
         if not self.has_state(state_name):
-            raise NoState('unknown initial state: {}'.format(state_name))
+            raise NoState(f'unknown initial state: {state_name}')
         if self.initial is not None and not force:
             raise AlreadyHasInitialState(
-                'multiple initial states, now: {}'.format(self.initial)
+                f'multiple initial states, now: {self.initial}'
             )
 
     def _prepare_transition(self, from_state, to_state, event,
@@ -200,7 +192,7 @@ class Machine(object):
 
     def get_state(self, state_name):
         if state_name not in self.states:
-            raise NoState('{} has no such state: {}'.format(self, state_name))
+            raise NoState(f'{self} has no such state: {state_name}')
         return self.states[state_name]
 
     def set_initial_state(self, state_name, force=False):
@@ -287,9 +279,7 @@ class Machine(object):
         state._on(Event('reinit'), instance)
 
     def __repr__(self):
-        return '<Machine: {}, states: {}>'.format(
-            self.name, self.states.keys()
-        )
+        return f'<Machine: {self.name}, states: {self.states.keys()}>'
 
 
 def state_machine(name, machine_class=None):

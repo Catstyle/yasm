@@ -9,7 +9,7 @@ from distutils.command.clean import clean
 
 pwd = path.abspath(path.dirname(__file__))
 __version__ = re.search(
-    "__version__\s*=\s*'(.*)'", open('yasm/__init__.py').read(), re.M
+    r"__version__\s*=\s*'(.*)'", open('yasm/__init__.py').read(), re.M
 ).group(1)
 assert __version__
 
@@ -63,8 +63,8 @@ setup(
         # Specify the Python versions you support here.
         # In particular, ensure that you indicate whether you support
         # Python 2, Python 3 or both.
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     cmdclass={'clean': MyClean}
 )
